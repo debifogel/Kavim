@@ -1,4 +1,6 @@
-﻿using Kavim.Core.classes;
+﻿using AutoMapper;
+using Kavim.Core.classes;
+using Kavim.Core.Dto;
 using Kavim.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,11 @@ namespace Kavim.Api.Controllers
     public class BusController : ControllerBase
     {
         private  readonly IBusService _context;
-
-        public BusController(IBusService context)
+        private readonly IMapper _mapper;
+        public BusController(IBusService context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         [HttpGet("{id}")]
         public ActionResult Get(int id)
@@ -27,14 +30,19 @@ namespace Kavim.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(s);
+
+            return Ok(_mapper.Map<BusDto>(s));
         }
 
         [HttpGet]
-        public IEnumerable<object>? Get([FromQuery] string? name, [FromQuery] string? destination, [FromQuery] string? source, [FromQuery] CompanyName? company)
+        public ActionResult Get([FromQuery] string? name, [FromQuery] string? destination, [FromQuery] string? source, [FromQuery] CompanyName? company)
         {
 
-            return _context.GetAll(name,company,destination,source);
+            List<Bus> b = (List<Bus>)_context.GetAll(name, company, destination, source);
+            var result = _mapper.Map<IEnumerable<BusDto>>(b);
+
+        
+            return Ok(result);
             
         }
        

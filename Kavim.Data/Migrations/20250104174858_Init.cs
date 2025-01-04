@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -10,6 +11,23 @@ namespace Kavim.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "buses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Company = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_buses", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "streets",
                 columns: table => new
@@ -25,15 +43,26 @@ namespace Kavim.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TimeOfBus",
+                name: "Schdule",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BusId = table.Column<int>(type: "int", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    TimeStart = table.Column<TimeOnly>(type: "time", nullable: false),
+                    TimeEnd = table.Column<TimeOnly>(type: "time", nullable: false),
+                    frenquecy = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TimeOfBus", x => x.Id);
+                    table.PrimaryKey("PK_Schdule", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Schdule_buses_BusId",
+                        column: x => x.BusId,
+                        principalTable: "buses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,80 +87,47 @@ namespace Kavim.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "buses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Company = table.Column<int>(type: "int", nullable: false),
-                    TimingsId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    StationId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_buses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_buses_TimeOfBus_TimingsId",
-                        column: x => x.TimingsId,
-                        principalTable: "TimeOfBus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_buses_stations_StationId",
-                        column: x => x.StationId,
-                        principalTable: "stations",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "StationAndi",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BusStopId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    BusId = table.Column<int>(type: "int", nullable: true)
+                    InOrder = table.Column<int>(type: "int", nullable: false),
+                    StopId = table.Column<int>(type: "int", nullable: false),
+                    _BusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StationAndi", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StationAndi_buses_BusId",
-                        column: x => x.BusId,
+                        name: "FK_StationAndi_buses__BusId",
+                        column: x => x._BusId,
                         principalTable: "buses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StationAndi_stations_BusStopId",
-                        column: x => x.BusStopId,
+                        name: "FK_StationAndi_stations_StopId",
+                        column: x => x.StopId,
                         principalTable: "stations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_buses_StationId",
-                table: "buses",
-                column: "StationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_buses_TimingsId",
-                table: "buses",
-                column: "TimingsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StationAndi_BusId",
-                table: "StationAndi",
+                name: "IX_Schdule_BusId",
+                table: "Schdule",
                 column: "BusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StationAndi_BusStopId",
+                name: "IX_StationAndi__BusId",
                 table: "StationAndi",
-                column: "BusStopId");
+                column: "_BusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StationAndi_StopId",
+                table: "StationAndi",
+                column: "StopId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_stations_StreetId",
@@ -143,13 +139,13 @@ namespace Kavim.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Schdule");
+
+            migrationBuilder.DropTable(
                 name: "StationAndi");
 
             migrationBuilder.DropTable(
                 name: "buses");
-
-            migrationBuilder.DropTable(
-                name: "TimeOfBus");
 
             migrationBuilder.DropTable(
                 name: "stations");

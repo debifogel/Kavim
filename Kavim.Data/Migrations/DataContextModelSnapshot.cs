@@ -21,21 +21,6 @@ namespace Kavim.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BusStation", b =>
-                {
-                    b.Property<int>("BusInStationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ListofstationsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BusInStationId", "ListofstationsId");
-
-                    b.HasIndex("ListofstationsId");
-
-                    b.ToTable("BusStation", (string)null);
-                });
-
             modelBuilder.Entity("Kavim.Core.classes.Bus", b =>
                 {
                     b.Property<int>("Id")
@@ -64,7 +49,7 @@ namespace Kavim.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("buses", (string)null);
+                    b.ToTable("buses");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Schdule", b =>
@@ -75,7 +60,7 @@ namespace Kavim.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BusId")
+                    b.Property<int>("BusId")
                         .HasColumnType("int");
 
                     b.Property<int>("Day")
@@ -94,7 +79,7 @@ namespace Kavim.Data.Migrations
 
                     b.HasIndex("BusId");
 
-                    b.ToTable("Schdule", (string)null);
+                    b.ToTable("Schdule");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Station", b =>
@@ -116,14 +101,14 @@ namespace Kavim.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StreetId")
+                    b.Property<int>("StreetIdId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StreetId");
+                    b.HasIndex("StreetIdId");
 
-                    b.ToTable("stations", (string)null);
+                    b.ToTable("stations");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.StationAndi", b =>
@@ -134,9 +119,6 @@ namespace Kavim.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("InOrder")
                         .HasColumnType("int");
 
@@ -146,13 +128,16 @@ namespace Kavim.Data.Migrations
                     b.Property<int>("StopId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("_BusId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("BusId");
+                    b.HasKey("Id");
 
                     b.HasIndex("StopId");
 
-                    b.ToTable("StationAndi", (string)null);
+                    b.HasIndex("_BusId");
+
+                    b.ToTable("StationAndi");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Street", b =>
@@ -173,51 +158,46 @@ namespace Kavim.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("streets", (string)null);
-                });
-
-            modelBuilder.Entity("BusStation", b =>
-                {
-                    b.HasOne("Kavim.Core.classes.Bus", null)
-                        .WithMany()
-                        .HasForeignKey("BusInStationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Kavim.Core.classes.Station", null)
-                        .WithMany()
-                        .HasForeignKey("ListofstationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("streets");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Schdule", b =>
                 {
                     b.HasOne("Kavim.Core.classes.Bus", null)
                         .WithMany("Timings")
-                        .HasForeignKey("BusId");
+                        .HasForeignKey("BusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Station", b =>
                 {
-                    b.HasOne("Kavim.Core.classes.Street", null)
+                    b.HasOne("Kavim.Core.classes.Street", "StreetId")
                         .WithMany("ListOfStation")
-                        .HasForeignKey("StreetId");
+                        .HasForeignKey("StreetIdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StreetId");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.StationAndi", b =>
                 {
-                    b.HasOne("Kavim.Core.classes.Bus", null)
-                        .WithMany("Listofstation")
-                        .HasForeignKey("BusId");
-
                     b.HasOne("Kavim.Core.classes.Station", "Stop")
-                        .WithMany()
+                        .WithMany("BusInStation")
                         .HasForeignKey("StopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Kavim.Core.classes.Bus", "_Bus")
+                        .WithMany("Listofstation")
+                        .HasForeignKey("_BusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Stop");
+
+                    b.Navigation("_Bus");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Bus", b =>
@@ -225,6 +205,11 @@ namespace Kavim.Data.Migrations
                     b.Navigation("Listofstation");
 
                     b.Navigation("Timings");
+                });
+
+            modelBuilder.Entity("Kavim.Core.classes.Station", b =>
+                {
+                    b.Navigation("BusInStation");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Street", b =>

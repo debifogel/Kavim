@@ -9,7 +9,7 @@ namespace Kavim.Core.Services
 {
     public interface IStationService
     {
-        List<Station> GetAll();
+        IEnumerable<Station> GetAll();
         Station GetById(int id);
 
         public bool DeleteActive(int id);

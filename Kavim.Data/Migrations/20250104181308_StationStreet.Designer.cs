@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kavim.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241229162448_update3")]
-    partial class update3
+    [Migration("20250104181308_StationStreet")]
+    partial class StationStreet
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,12 +50,7 @@ namespace Kavim.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StationId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StationId");
 
                     b.ToTable("buses");
                 });
@@ -68,7 +63,7 @@ namespace Kavim.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BusId")
+                    b.Property<int>("BusId")
                         .HasColumnType("int");
 
                     b.Property<int>("Day")
@@ -109,12 +104,12 @@ namespace Kavim.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StreetId")
+                    b.Property<int>("StreetIdId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StreetId");
+                    b.HasIndex("StreetIdId");
 
                     b.ToTable("stations");
                 });
@@ -127,9 +122,6 @@ namespace Kavim.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("InOrder")
                         .HasColumnType("int");
 
@@ -139,11 +131,14 @@ namespace Kavim.Data.Migrations
                     b.Property<int>("StopId")
                         .HasColumnType("int");
 
+                    b.Property<int>("_BusId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BusId");
-
                     b.HasIndex("StopId");
+
+                    b.HasIndex("_BusId");
 
                     b.ToTable("StationAndi");
                 });
@@ -169,40 +164,43 @@ namespace Kavim.Data.Migrations
                     b.ToTable("streets");
                 });
 
-            modelBuilder.Entity("Kavim.Core.classes.Bus", b =>
-                {
-                    b.HasOne("Kavim.Core.classes.Station", null)
-                        .WithMany("BusInStation")
-                        .HasForeignKey("StationId");
-                });
-
             modelBuilder.Entity("Kavim.Core.classes.Schdule", b =>
                 {
                     b.HasOne("Kavim.Core.classes.Bus", null)
                         .WithMany("Timings")
-                        .HasForeignKey("BusId");
+                        .HasForeignKey("BusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Station", b =>
                 {
-                    b.HasOne("Kavim.Core.classes.Street", null)
+                    b.HasOne("Kavim.Core.classes.Street", "StreetId")
                         .WithMany("ListOfStation")
-                        .HasForeignKey("StreetId");
+                        .HasForeignKey("StreetIdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StreetId");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.StationAndi", b =>
                 {
-                    b.HasOne("Kavim.Core.classes.Bus", null)
-                        .WithMany("Listofstation")
-                        .HasForeignKey("BusId");
-
                     b.HasOne("Kavim.Core.classes.Station", "Stop")
-                        .WithMany()
+                        .WithMany("BusInStation")
                         .HasForeignKey("StopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Kavim.Core.classes.Bus", "_Bus")
+                        .WithMany("Listofstation")
+                        .HasForeignKey("_BusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Stop");
+
+                    b.Navigation("_Bus");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Bus", b =>

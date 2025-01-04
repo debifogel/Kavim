@@ -41,7 +41,7 @@ namespace Kavim.Service
             }
             return false;
         }
-        public List<Station> GetAll()
+        public IEnumerable<Station> GetAll()
         {
           return  _stationRepository.GetAll(null,null,null,null);
         }

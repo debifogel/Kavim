@@ -15,8 +15,8 @@ namespace Kavim.Core.classes
         public StatusOfStation Status { get; set; }
         public int InOrder {  get; set; }
         public Station Stop { get; set; }
-        
-        
+               public Bus _Bus { get; set; }
+
 
     }
 }

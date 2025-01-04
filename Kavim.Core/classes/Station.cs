@@ -10,8 +10,9 @@ namespace Kavim.Core.classes
         public string StationName { get; set; }
         public string City { get; set; }
         //many to many
-        public List<Bus> BusInStation { get; set; }
+        public List<StationAndi> BusInStation { get; set; }
         public bool IsActive { get; set; }
+        public Street StreetId { get; set; }
         public Station()
         {
             
@@ -20,7 +21,7 @@ namespace Kavim.Core.classes
         public Station(string stationName, string city)
         {
            
-            BusInStation = new List<Bus>();
+            BusInStation = new List<StationAndi>();
             StationName = stationName;
             City = city;
             IsActive = true;

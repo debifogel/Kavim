@@ -40,9 +40,9 @@ namespace Kavim.Service
             }
             return result;
         }
-        public List<Bus> GetAll(string? name, CompanyName? company, string? destination, string? source)
+        public IEnumerable<Bus> GetAll(string? name, CompanyName? company, string? destination, string? source)
         {
-           return (List<Bus>)_busRepository.GetAll(name,destination,source,company);
+           return _busRepository.GetAll(name,destination,source,company);
         }
 
         public Bus GetById(int id)
@@ -84,7 +84,7 @@ namespace Kavim.Service
             if(b!=null)
             {
                 b.Listofstation.Add(station);
-                station.Stop.BusInStation.Add(b);
+                station.Stop.BusInStation.Add(station);
                 _Save.Savechanges() ;
                 return true;
             }

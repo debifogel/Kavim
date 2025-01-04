@@ -26,7 +26,7 @@ namespace Kavim.Service
             return false;
         }
 
-        public List<Street> GetAll(string? name, string? city)
+        public IEnumerable<Street> GetAll(string? name, string? city)
         {
             return (List<Street>)_streetRepository.GetAll(name,city,null,null);
         }
@@ -42,10 +42,11 @@ namespace Kavim.Service
             _Save.Savechanges();
         }
 
-        public bool UpDate(int id, Street street)
+        public bool UpDate(int id, NameAndCity street)
         {
 
-            bool result = _streetRepository.UpDate(id, street);
+            bool result = _streetRepository.UpDate(id, new Street(street.Name,street.City));
+
             if (result)
             {
                 _Save.Savechanges();
@@ -58,6 +59,7 @@ namespace Kavim.Service
             if (street != null)
             {
                 street.ListOfStation.Add(station);
+                station.StreetId = street;
                 _Save.Savechanges();
                 return true;
             }

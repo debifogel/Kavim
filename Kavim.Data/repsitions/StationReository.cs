@@ -1,6 +1,7 @@
 ﻿using Kavim.Core.classes;
 using Kavim.Core.repsitory;
 using Kavim.Data.data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,12 +39,12 @@ namespace Kavim.Data.repsitions
         }
         public Station Get(int id)
         {
-            return _context.stations.FirstOrDefault(station=>station.Id==id);
+            return _context.stations.Include(s=>s.BusInStation).Include(s=>s.BusInStation).FirstOrDefault(station=>station.Id==id);
         }
 
-        public List<Station> GetAll(string? name, string? city, string? c, CompanyName? stam)
+        public IEnumerable<Station> GetAll(string? name, string? city, string? c, CompanyName? stam)
         {
-            return _context.stations.ToList();
+            return _context.stations.Include(s => s.StreetId);
         }
         public bool UpDate(int id, Station item)
         {

@@ -1,4 +1,6 @@
-﻿using Kavim.Core.classes;
+﻿using AutoMapper;
+using Kavim.Core.classes;
+using Kavim.Core.Dto;
 using Kavim.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,16 +13,21 @@ namespace Kavim.Api.Controllers
     public class StationController : ControllerBase
     {
         private readonly IStationService _context;
-        public StationController(IStationService context)
+        private readonly IMapper _mapper;
+
+        public StationController(IStationService context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/<StationController>
         [HttpGet]
-        public IEnumerable<Station> Get()
+        public ActionResult Get()
         {
-            return _context.GetAll();
+            var s = _context.GetAll();
+            var result=_mapper.Map<IEnumerable<StationDto>>(s);
+            return Ok(result);
         }
 
         // GET api/<StationController>/5
@@ -33,7 +40,7 @@ namespace Kavim.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(s);
+            return Ok(_mapper.Map<StationDto>(s));
         }
 
         // POST api/<StationController>

@@ -6,7 +6,7 @@ namespace Kavim.Core.Services
     public interface IBusService
     {
 
-        List<Bus> GetAll(string? name, CompanyName? company, string? destination, string? source);
+        IEnumerable<Bus> GetAll(string? name, CompanyName? company, string? destination, string? source);
         Bus GetById(int id);
 
         public bool DeleteActive(int id);

@@ -1,4 +1,5 @@
-﻿using Kavim.Core.classes;
+﻿using AutoMapper;
+using Kavim.Core.classes;
 using Kavim.Core.repsitory;
 using Kavim.Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,27 +15,32 @@ namespace Kavim.Api.Controllers
     {
         private readonly IStreetService _context;
 
-
-        public StreetController(IStreetService context)
+        private readonly IMapper _mapper;
+        public StreetController(IStreetService context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         // GET: api/<StreetController>
         [HttpGet]
-        public IEnumerable<Street> Get([FromQuery] string? name, [FromQuery] string? city)
+        public ActionResult Get([FromQuery] string? name, [FromQuery] string? city)
         {
-            return _context.GetAll(name, city);
+            var s = _context.GetAll(name, city);
+            var result=_mapper.Map<IEnumerable< StreetDto>>(s);
+            return Ok(result);
         }
 
         // GET api/<StreetController>/5
 
         //צריך לחשוב איך לעשות את זה 
         [HttpGet("{id}")]
-        public Street Get(int id)
+        public ActionResult Get(int id)
         {
 
-            return _context.GetById(id);
-
+            var s= _mapper.Map<StreetDto>( _context.GetById(id));
+            if(s == null)
+                return NotFound();
+            return Ok(s);
 
         }
 
@@ -49,9 +55,9 @@ namespace Kavim.Api.Controllers
 
         // PUT api/<StreetController>/5
         [HttpPut("/update/{id}")]
-        public IActionResult update(int id, [FromBody] Street street)
+        public IActionResult update(int id, [FromBody] NameAndCity street)
         {
-            bool result = _context.UpDate(id, street);
+            bool result = _context.UpDate(id,street );
 
             if (result)
             {

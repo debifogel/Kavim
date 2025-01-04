@@ -19,6 +19,7 @@ namespace Kavim.Core.classes
     public class Schdule
     {
         public int Id { get; set; }
+        public int BusId { get; set; }
         public Days Day { get; set; }
         public TimeOnly TimeStart { get; set; }
         public TimeOnly TimeEnd { get; set; }

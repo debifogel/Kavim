@@ -12,7 +12,7 @@ namespace Kavim.Core.repsitory
         public void Add(T item);
         public bool Delete(T item);
         public bool Delete(int id);
-        public List<T> GetAll(string? a, string? b, string? c, CompanyName? company);
+        public IEnumerable<T> GetAll(string? a, string? b, string? c, CompanyName? company);
         public T Get(int id);
         public  bool UpDate(int id,T item);
     }

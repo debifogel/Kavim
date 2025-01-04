@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Kavim.Core.classes;
 using Kavim.Core.repsitory;
 using Kavim.Data.data;
+using Microsoft.EntityFrameworkCore;
 namespace Kavim.Data.repsitions
 {
     public class BusRepository : IRepository<Bus>
@@ -37,16 +34,16 @@ namespace Kavim.Data.repsitions
 
         public Bus Get(int id)
         {
-          return  _context.buses.ToList().FirstOrDefault(x => x.Id == id);
+          return  _context.buses.Include(b=>b.Timings).FirstOrDefault(x => x.Id == id);
         }
 
-        public List<Bus> GetAll(string? name, string? destination, string? source, CompanyName? company)
+        public IEnumerable<Bus> GetAll(string? name, string? destination, string? source, CompanyName? company)
         {
-            return (List<Bus>)_context.buses.Where(bus =>
+            return  _context.buses.Include(b => b.Timings).Where(bus =>
                     (bus.BusName == null || bus.BusName == name)
                     && (bus.Company == 0 || bus.Company == company)
                      && (destination == null || bus.Destination == destination)
-                && (destination == null || bus.Source == source)).ToList();
+                && (destination == null || bus.Source == source));
         }
 
         public bool UpDate(int id, Bus item)
