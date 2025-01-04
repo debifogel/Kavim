@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kavim.Api", "Kavim\Kavim.Api.csproj", "{354C73B5-C15B-4FA5-A204-D2A6148969AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kavim.Core", "Kavim.Core\Kavim.Core.csproj", "{9889AAAB-51D8-4483-BEDC-42A9BBA04CFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kavim.Data", "Kavim.Data\Kavim.Data.csproj", "{35AB921B-4C44-4A46-8526-541446510501}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kavim.Service", "Kavim.Service\Kavim.Service.csproj", "{17BA2C11-798C-419A-BB68-612375446E3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{354C73B5-C15B-4FA5-A204-D2A6148969AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354C73B5-C15B-4FA5-A204-D2A6148969AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354C73B5-C15B-4FA5-A204-D2A6148969AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354C73B5-C15B-4FA5-A204-D2A6148969AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9889AAAB-51D8-4483-BEDC-42A9BBA04CFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9889AAAB-51D8-4483-BEDC-42A9BBA04CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9889AAAB-51D8-4483-BEDC-42A9BBA04CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9889AAAB-51D8-4483-BEDC-42A9BBA04CFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35AB921B-4C44-4A46-8526-541446510501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AB921B-4C44-4A46-8526-541446510501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AB921B-4C44-4A46-8526-541446510501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AB921B-4C44-4A46-8526-541446510501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BA2C11-798C-419A-BB68-612375446E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BA2C11-798C-419A-BB68-612375446E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BA2C11-798C-419A-BB68-612375446E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BA2C11-798C-419A-BB68-612375446E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
