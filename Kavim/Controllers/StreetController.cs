@@ -67,9 +67,9 @@ namespace Kavim.Api.Controllers
             return NotFound();
         }
         [HttpPut("/addStation/{id}")]
-        public IActionResult AddStation(int id, [FromBody] Station station)
+        public IActionResult AddStation(int id, [FromBody] NameAndCity station)
         {
-            bool result = _context.AddStation(station, id);
+            bool result = _context.AddStation(new Station(station.Name,station.City), id);
             if (result)
             {
                 

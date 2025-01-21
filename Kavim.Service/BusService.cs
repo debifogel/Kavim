@@ -11,15 +11,17 @@ namespace Kavim.Service
 {
     public class BusService : IBusService
     {
+       
         private readonly IRepository<Bus> _busRepository;
+       //does it correct???????????????????????????????????????????????????????????????????????
+        private readonly IRepository<Station> _station;
         private readonly IManager _Save;
-
-        public BusService(IRepository<Bus> repository, IManager save)
+        public BusService(IRepository<Bus> repository, IManager save, IRepository<Station> station)
         {
             _busRepository = repository;
             _Save = save;
+            _station = station;
         }
-
         public bool DeleteActive(int id)
         {
             Bus b = _busRepository.Get(id);
@@ -44,13 +46,11 @@ namespace Kavim.Service
         {
            return _busRepository.GetAll(name,destination,source,company);
         }
-
         public Bus GetById(int id)
         {
            return _busRepository.Get(id);
                                         
         }
-
         public void Post(Busfrombody busfrombody)
         {
             Bus b = new Bus();
@@ -64,7 +64,6 @@ namespace Kavim.Service
             _Save.Savechanges();
 
         }
-
         public bool UpDate(int id, Busfrombody bus)
         {
             Bus _bus=new Bus();
@@ -83,6 +82,11 @@ namespace Kavim.Service
           Bus b=  _busRepository.Get(id);
             if(b!=null)
             {
+               Station s= _station.Get(station.Stop.Id);
+                if (s == null)
+                    throw new Exception("eror this station not found");
+                station.Stop = s;
+                station._Bus = b;
                 b.Listofstation.Add(station);
                 station.Stop.BusInStation.Add(station);
                 _Save.Savechanges() ;

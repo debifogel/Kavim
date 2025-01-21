@@ -17,11 +17,11 @@ namespace Kavim.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Company = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    BusName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Company = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,8 +34,8 @@ namespace Kavim.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -71,17 +71,17 @@ namespace Kavim.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    StreetId = table.Column<int>(type: "int", nullable: true)
+                    StationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    InStreetId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_stations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_stations_streets_StreetId",
-                        column: x => x.StreetId,
+                        name: "FK_stations_streets_InStreetId",
+                        column: x => x.InStreetId,
                         principalTable: "streets",
                         principalColumn: "Id");
                 });
@@ -95,17 +95,16 @@ namespace Kavim.Data.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     InOrder = table.Column<int>(type: "int", nullable: false),
                     StopId = table.Column<int>(type: "int", nullable: false),
-                    _BusId = table.Column<int>(type: "int", nullable: false)
+                    BusId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StationAndi", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StationAndi_buses__BusId",
-                        column: x => x._BusId,
+                        name: "FK_StationAndi_buses_BusId",
+                        column: x => x.BusId,
                         principalTable: "buses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_StationAndi_stations_StopId",
                         column: x => x.StopId,
@@ -120,9 +119,9 @@ namespace Kavim.Data.Migrations
                 column: "BusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StationAndi__BusId",
+                name: "IX_StationAndi_BusId",
                 table: "StationAndi",
-                column: "_BusId");
+                column: "BusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StationAndi_StopId",
@@ -130,9 +129,9 @@ namespace Kavim.Data.Migrations
                 column: "StopId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_stations_StreetId",
+                name: "IX_stations_InStreetId",
                 table: "stations",
-                column: "StreetId");
+                column: "InStreetId");
         }
 
         /// <inheritdoc />

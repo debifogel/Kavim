@@ -53,9 +53,9 @@ namespace Kavim.Api.Controllers
 
         // PUT api/<StationController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Station value)
+        public IActionResult Put(int id, [FromBody] NameAndCity value)
         {
-           bool result= _context.UpDate(id, value);
+            bool result = _context.UpDate(id, new Station(value.Name,value.City));
             if (result)
             {
                 return Ok();

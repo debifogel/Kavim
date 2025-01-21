@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kavim.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250119191713_update1")]
+    partial class update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,12 @@ namespace Kavim.Data.Migrations
                     b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StationId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("StationId");
 
                     b.ToTable("buses");
                 });
@@ -114,6 +122,9 @@ namespace Kavim.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("InOrder")
                         .HasColumnType("int");
 
@@ -123,14 +134,11 @@ namespace Kavim.Data.Migrations
                     b.Property<int>("StopId")
                         .HasColumnType("int");
 
-                    b.Property<int>("_BusId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("StopId");
+                    b.HasIndex("BusId");
 
-                    b.HasIndex("_BusId");
+                    b.HasIndex("StopId");
 
                     b.ToTable("StationAndi");
                 });
@@ -154,6 +162,13 @@ namespace Kavim.Data.Migrations
                     b.ToTable("streets");
                 });
 
+            modelBuilder.Entity("Kavim.Core.classes.Bus", b =>
+                {
+                    b.HasOne("Kavim.Core.classes.Station", null)
+                        .WithMany("BusInStation")
+                        .HasForeignKey("StationId");
+                });
+
             modelBuilder.Entity("Kavim.Core.classes.Schdule", b =>
                 {
                     b.HasOne("Kavim.Core.classes.Bus", null)
@@ -174,21 +189,17 @@ namespace Kavim.Data.Migrations
 
             modelBuilder.Entity("Kavim.Core.classes.StationAndi", b =>
                 {
+                    b.HasOne("Kavim.Core.classes.Bus", null)
+                        .WithMany("Listofstation")
+                        .HasForeignKey("BusId");
+
                     b.HasOne("Kavim.Core.classes.Station", "Stop")
-                        .WithMany("BusInStation")
+                        .WithMany()
                         .HasForeignKey("StopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kavim.Core.classes.Bus", "_Bus")
-                        .WithMany("Listofstation")
-                        .HasForeignKey("_BusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Stop");
-
-                    b.Navigation("_Bus");
                 });
 
             modelBuilder.Entity("Kavim.Core.classes.Bus", b =>

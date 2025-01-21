@@ -9,8 +9,7 @@ namespace Kavim.Data.repsitions
     {
         IData _context;
         
-        public BusRepository(IData context) { _context = context; }
-        
+        public BusRepository(IData context) { _context = context; }       
         public void Add(Bus item)
         {
             _context.buses.Add(item);
@@ -30,13 +29,10 @@ namespace Kavim.Data.repsitions
             }
             return false;
         }
-
-
         public Bus Get(int id)
         {
           return  _context.buses.Include(b=>b.Timings).FirstOrDefault(x => x.Id == id);
         }
-
         public IEnumerable<Bus> GetAll(string? name, string? destination, string? source, CompanyName? company)
         {
             return  _context.buses.Include(b => b.Timings).Where(bus =>
@@ -45,18 +41,24 @@ namespace Kavim.Data.repsitions
                      && (destination == null || bus.Destination == destination)
                 && (destination == null || bus.Source == source));
         }
-
         public bool UpDate(int id, Bus item)
         {
             Bus b = Get(id);
             if (b != null)
             {
+                if(item.Destination != null && item.Destination != "string")
                 b.Destination = item.Destination;
+                if(item.Source != null && item.Source != "string")
                 b.Source = item.Source;
+                if(item.IsActive != null)
                 b.IsActive = item.IsActive;
+                if(item.Listofstation!=null)
                 b.Listofstation = item.Listofstation;
+                if(item.Company!=null)
                 b.Company = item.Company;
+                if(item.BusName != null && item.BusName != "string")
                 b.BusName = item.BusName;
+                if(item.Timings!=null)
                 b.Timings = item.Timings;
                 return true;
 

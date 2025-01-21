@@ -21,7 +21,6 @@ namespace Kavim.Data.repsitions
         {
             _context.stations.Add(item);
         }
-
         public bool Delete(Station item)
         {
             _context.stations.Remove(item);
@@ -41,20 +40,23 @@ namespace Kavim.Data.repsitions
         {
             return _context.stations.Include(s=>s.BusInStation).Include(s=>s.BusInStation).FirstOrDefault(station=>station.Id==id);
         }
-
         public IEnumerable<Station> GetAll(string? name, string? city, string? c, CompanyName? stam)
         {
-            return _context.stations.Include(s => s.StreetId);
+            return _context.stations.Include(s => s.InStreet);
         }
         public bool UpDate(int id, Station item)
         {
             Station s = Get(id);
             if (s != null)
             {
+                if(item.StationName!=null&&item.StationName!="string")
                 s.StationName = item.StationName;
+                if(item.BusInStation!=null)
                 s.BusInStation = item.BusInStation;
+                if(item.IsActive != null)
                 s.IsActive = item.IsActive;
-                s.City = item.City;
+                if (item.City != null && item.City != "string")
+                    s.City = item.City;
                 return true;
             }
             return false;

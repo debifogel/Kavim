@@ -7,7 +7,7 @@
         public string Name { get; set; }
         public string City { get; set; }
         //one to many
-        public List<Station> ListOfStation { get; set; }
+        public List<Station>? ListOfStation { get; set; }
         public Street(string name, string city)
         {
             

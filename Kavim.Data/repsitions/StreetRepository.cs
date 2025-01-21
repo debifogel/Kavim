@@ -17,7 +17,6 @@ namespace Kavim.Data.repsitions
         {
             _context.streets.Add(item);
         }
-
         public bool Delete(Street item)
         {
             _context.streets.Remove(item);
@@ -37,7 +36,6 @@ namespace Kavim.Data.repsitions
         {
             return _context.streets.Include(u=>u.ListOfStation).FirstOrDefault(street=>street.Id == id);
         }
-
         public IEnumerable<Street> GetAll(string? name, string? city, string? c, CompanyName? stam)
         {
             return _context.streets.Include(u => u.ListOfStation).Where(item => (city == null || item.City == city) && (name == null || item.Name == name));
@@ -46,18 +44,14 @@ namespace Kavim.Data.repsitions
         {
             Street s=Get(id);
             if (s != null)
-            {
-                s.Name = item.Name;               
+            {if(item.Name!=null&& item.Name !="string")
+                s.Name = item.Name;  
+             if(item.City!=null&& item.City !="string")
                 s.City = item.City;
 
                 return true;
             }
             return false;
         }
-
-
-
-
-
     }
 }

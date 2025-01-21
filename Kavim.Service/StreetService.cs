@@ -9,10 +9,10 @@ namespace Kavim.Service
         private readonly IRepository<Street> _streetRepository;
         private readonly IManager _Save;
 
-        public StreetService(IRepository<Street>_repository)
+        public StreetService(IRepository<Street>_repository,IManager save)
         {
             this._streetRepository = _repository;
-           
+            _Save = save;
         }
 
         public bool Delete(int id)
@@ -28,7 +28,7 @@ namespace Kavim.Service
 
         public IEnumerable<Street> GetAll(string? name, string? city)
         {
-            return (List<Street>)_streetRepository.GetAll(name,city,null,null);
+            return _streetRepository.GetAll(name,city,null,null);
         }
 
         public Street GetById(int id)
@@ -59,7 +59,7 @@ namespace Kavim.Service
             if (street != null)
             {
                 street.ListOfStation.Add(station);
-                station.StreetId = street;
+                station.InStreet = street;
                 _Save.Savechanges();
                 return true;
             }
