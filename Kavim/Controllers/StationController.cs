@@ -47,15 +47,15 @@ namespace Kavim.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] NameAndCity value)
         {
-            _context.Post(value);
+            _context.PostAsync(value);
             return Ok();
         }
 
         // PUT api/<StationController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] NameAndCity value)
+        public async Task<IActionResult> Put(int id, [FromBody] NameAndCity value)
         {
-            bool result = _context.UpDate(id, new Station(value.Name,value.City));
+            bool result = await _context.UpDateAsync(id, new Station(value.Name,value.City));
             if (result)
             {
                 return Ok();
@@ -65,9 +65,9 @@ namespace Kavim.Api.Controllers
 
         // DELETE api/<StationController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            bool result = _context.Delete(id);
+            bool result =await  _context.DeleteAsync(id);
             if (result)
             {
                 return Ok();

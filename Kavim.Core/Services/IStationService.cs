@@ -12,10 +12,10 @@ namespace Kavim.Core.Services
         IEnumerable<Station> GetAll();
         Station GetById(int id);
 
-        public bool DeleteActive(int id);
-        public bool Delete(int id);
-        public void Post(NameAndCity busfrombody);
-        public bool UpDate(int id, Station bus);
+        public Task<bool> DeleteActiveAsync(int id);
+        public Task<bool> DeleteAsync(int id);
+        public void PostAsync(NameAndCity busfrombody);
+        public Task<bool> UpDateAsync(int id, Station bus);
 
     }
 }

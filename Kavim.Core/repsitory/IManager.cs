@@ -8,6 +8,6 @@ namespace Kavim.Core.repsitory
 {
     public interface IManager
     {
-        void Savechanges();
+        Task<int> SavechangesAync();
     }
 }

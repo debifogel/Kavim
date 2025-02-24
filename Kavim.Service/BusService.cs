@@ -22,23 +22,23 @@ namespace Kavim.Service
             _Save = save;
             _station = station;
         }
-        public bool DeleteActive(int id)
+        public async Task<bool> DeleteActiveAsync(int id)
         {
             Bus b = _busRepository.Get(id);
             if (b != null)
             {
                 b.IsActive = false;
-                _Save.Savechanges();
+                 _Save.SavechangesAync(); 
                 return true;
             }
             return false;
         }
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             bool result = _busRepository.Delete(id);
             if ((result))
             {
-                _Save.Savechanges();
+               await _Save.SavechangesAync();
             }
             return result;
         }
@@ -51,7 +51,7 @@ namespace Kavim.Service
            return _busRepository.Get(id);
                                         
         }
-        public void Post(Busfrombody busfrombody)
+        public  async void PostAsync(Busfrombody busfrombody)
         {
             Bus b = new Bus();
 
@@ -61,10 +61,10 @@ namespace Kavim.Service
             b.Company = busfrombody.Company;
             b.IsActive = true;
             _busRepository.Add(b);
-            _Save.Savechanges();
+            var r=await _Save.SavechangesAync();
 
         }
-        public bool UpDate(int id, Busfrombody bus)
+        public async Task<bool> UpDateAsync(int id, Busfrombody bus)
         {
             Bus _bus=new Bus();
             _bus.BusName = bus.BusName;
@@ -74,10 +74,10 @@ namespace Kavim.Service
             
             
             bool result = _busRepository.UpDate(id, _bus);
-            if ((result)) {_Save.Savechanges(); }
+            if ((result)) {await _Save.SavechangesAync(); }
             return result;
         }
-        public bool AddStation(StationAndi station, int id)
+        public async Task<bool> AddStationAsync(StationAndi station, int id)
         {
           Bus b=  _busRepository.Get(id);
             if(b!=null)
@@ -89,8 +89,9 @@ namespace Kavim.Service
                 station._Bus = b;
                 b.Listofstation.Add(station);
                 station.Stop.BusInStation.Add(station);
-                _Save.Savechanges() ;
-                return true;
+              var r= await  _Save.SavechangesAync() ;
+                if(r==1)
+                 return true;
             }
             return false;
         }

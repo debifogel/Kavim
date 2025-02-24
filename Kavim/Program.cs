@@ -1,3 +1,4 @@
+using Kavim.Api.MiddelWare;
 using Kavim.Core;
 using Kavim.Core.classes;
 using Kavim.Core.repsitory;
@@ -35,5 +36,6 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseCheckDate();
 app.MapControllers();
 app.Run();

@@ -15,12 +15,12 @@ namespace Kavim.Service
             _Save = save;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
           bool result= _streetRepository.Delete(id);
             if (result)
             {
-                _Save.Savechanges();
+              await  _Save.SavechangesAync();
                 return true;
             }
             return false;
@@ -36,31 +36,31 @@ namespace Kavim.Service
            return _streetRepository.Get(id);
         }
 
-        public void Post(NameAndCity busfrombody)
+        public async void PostAsync(NameAndCity busfrombody)
         {
             _streetRepository.Add(new Street(busfrombody.Name, busfrombody.City));
-            _Save.Savechanges();
+           await _Save.SavechangesAync();
         }
 
-        public bool UpDate(int id, NameAndCity street)
+        public async Task<bool> UpDateAsync(int id, NameAndCity street)
         {
 
             bool result = _streetRepository.UpDate(id, new Street(street.Name,street.City));
 
             if (result)
             {
-                _Save.Savechanges();
+               await _Save.SavechangesAync();
                 return true; 
             }return false;
         }
-        public bool AddStation(Station station,int id)
+        public async Task<bool> AddStationAsync(Station station,int id)
         {
             Street street = _streetRepository.Get(id);
             if (street != null)
             {
                 street.ListOfStation.Add(station);
                 station.InStreet = street;
-                _Save.Savechanges();
+               await _Save.SavechangesAync();
                 return true;
             }
             return false;

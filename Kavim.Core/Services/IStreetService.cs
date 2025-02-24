@@ -12,9 +12,9 @@ namespace Kavim.Core.Services
         IEnumerable<Street> GetAll(string? name,string? city);
         Street GetById(int id);
 
-        public bool Delete(int id);
-        public void Post(NameAndCity busfrombody);
-        public bool UpDate(int id, NameAndCity street);
-        public bool AddStation(Station station,int id);
+        public  Task<bool> DeleteAsync(int id);
+        public void PostAsync(NameAndCity busfrombody);
+        public Task<bool> UpDateAsync(int id, NameAndCity street);
+        public Task<bool> AddStationAsync(Station station,int id);
     }
 }

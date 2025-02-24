@@ -38,10 +38,8 @@ namespace Kavim.Api.Controllers
         public ActionResult Get([FromQuery] string? name, [FromQuery] string? destination, [FromQuery] string? source, [FromQuery] CompanyName? company)
         {
 
-            List<Bus> b = (List<Bus>)_context.GetAll(name, company, destination, source);
-            var result = _mapper.Map<IEnumerable<BusDto>>(b);
-
-        
+            var b = _context.GetAll(name, company, destination, source);
+            var result = _mapper.Map<IEnumerable<BusDto>>(b);       
             return Ok(result);
             
         }
@@ -52,15 +50,15 @@ namespace Kavim.Api.Controllers
         public IActionResult Post([FromBody] Busfrombody bus)
         {
             
-            _context.Post(bus);
+             _context.PostAsync(bus);
             return Ok();
         }
 
         // PUT api/<BusController>/5
         [HttpPut("/update{id}")]
-        public IActionResult Update(int id, [FromBody] Busfrombody bus)
+        public async Task<IActionResult> Update(int id, [FromBody] Busfrombody bus)
         {
-           bool result= _context.UpDate(id, bus);
+           bool result=await _context.UpDateAsync(id, bus);
             if (result)
             {
                 return Ok();
@@ -68,13 +66,13 @@ namespace Kavim.Api.Controllers
             return NotFound();
         }
         [HttpPut("/addStation{id}")]
-        public IActionResult addStation(int id, [FromBody] StationPut station)
+        public async Task<IActionResult> addStation(int id, [FromBody] StationPut station)
         {
             StationAndi temp = new StationAndi();
             temp.Status = station.Status;
             temp.InOrder = station.InOrder;
             temp.Stop = new Station() { Id = station.Stop };
-            bool result= _context.AddStation(temp,id);
+            bool result= await _context.AddStationAsync(temp,id);
             if (result) { return Ok();}
             
            return NotFound();
@@ -82,9 +80,9 @@ namespace Kavim.Api.Controllers
 
         // DELETE api/<BusController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _context.Delete(id);
+           await _context.DeleteAsync(id);
             return Ok();
         }
     }

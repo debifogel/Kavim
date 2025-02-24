@@ -17,9 +17,10 @@ namespace Kavim.Data.repsitions
             _context = context;
         }
 
-        public void Savechanges()
+        public async Task<int> SavechangesAync()
         {
-            _context.SaveChanges();
+          var r= await _context.SaveChangesAsync();
+            return r;
         }
     }
 }

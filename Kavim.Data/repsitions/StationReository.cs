@@ -42,7 +42,7 @@ namespace Kavim.Data.repsitions
         }
         public IEnumerable<Station> GetAll(string? name, string? city, string? c, CompanyName? stam)
         {
-            return _context.stations.Include(s => s.InStreet);
+            return _context.stations.Where(s => (name == null || s.StationName == name) && (city == null||s.City==city)).Include(s => s.InStreet);
         }
         public bool UpDate(int id, Station item)
         {
